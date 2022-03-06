@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width">
+	<title>repl.it</title>
+	<link href="style.css" rel="stylesheet" type="text/css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <script type="module" src="ui.js"></script>
+  <link rel="apple-touch-icon" sizes="180x180" href="img/favicon/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="img/favicon/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="img/favicon/favicon-16x16.png">
+  <link rel="manifest" href="img/favicon/site.webmanifest">
+</head>
+
+<body>
+	<header>
+		<h1>Roostermaker voor EPI</h1>
+	</header>
+  <button type="button" id="showHelp" name="showHelp">HANDLEIDING</button>
+	<section class="intro hide">
+		<p>Dit programma kan een herkansingsrooster maken aan de hand van inschrijvingen. Inschrijvingen behoren te worden geleverd
+			in TAB-separated vorm (dit kan met copy/paste uit Excel):</p>
+		<pre>STUDENTNR    VAK-CODE</pre>
+		
+    <div id="help">
+      <p>Eisen:</p>
+      <ol>
+        <li>studentnummers uniek gekoppeld aan een student</li>
+        <li>vakcodes uniek gekoppeld aan een toets</li>
+        <li>geen duplicaten in de lijst</li>
+      </ol>
+	</section>
+
+	<div id="container">
+		<section class="copy">
+			<form action="">
+				<h2><span class="number">1</span> Instellingen</h2>
+        <div class="general">
+          <div class="field days">
+            <label for="days">Dagen</label>
+            <input name="days" type="number" min="1" max="10" value="5" />
+          </div>
+
+          <div class="field examsPerDay">
+            <label for="examsPerDay">Examens per dag</label>
+            <input id="examsPerDay" name="examsPerDay" type="number" min="1" max="4" value="3" />
+          </div>
+        </div>
+        <div>
+          <button type="button" id="showTechnical">Meer instellingen...</button>
+        </div>
+        <div class="technical hide">
+          <div class="field mutation">          
+            <label for="mutationProbability">Flexibiliteit (%) <span class="number">?</span></label>
+            <p class="description">
+              De flexibiliteit is de kans dat er iets willekeurig wordt veranderd in een rooster. 
+              Meer flexibiliteit helpt wanneer het programma niet verder komt. 
+              Minder flexibiliteit is goed wanneer een oplossing eenvoudig gevonden wordt.
+            </p>
+            <input id="mutationProbability" name="mutationProbability" type="number" min="1" max="100" value="80" />
+          </div>
+
+          <div class="field population">
+            <label for="populationSize">Vermogen (1-100) <span class="number">?</span></label>
+            <p class="description">
+              Het vermogen is het aantal roosters dat tegelijk wordt gemaakt. 
+              Meer vermogen maakt de zoektocht langzamer, 
+              maar met meer kans op het vinden van een oplossing.
+            </p>
+            <input id="populationSize" name="populationSize" type="number" min="1" max="100" value="20" />
+          </div>
+
+          <div class="field prepare">
+            <label for="prepare">Vooraf optimaliseren <span class="number">?</span></label>
+            <p class="description">
+              Een vooraf geoptimaliseerd rooster zal soms beter werken.
+              Eerst wordt het rooster gevuld (grootste examen eerst).
+              Pas daarna wordt geoptimaliseerd.
+              Zonder optimalisatie start het rooster volledig willekeurig.
+            </p>
+            <select id="prepare" name="prepare">
+              <option value="true" selected>Ja</option>
+              <option value="false">Nee</option>
+            </select>
+          </div>
+
+          <div class="field generations">
+            <label for="generations">Maximaal aantal rondes (100-20000) <span class="number">?</span></label>
+            <p class="description">
+              Als een rooster niet gevonden wordt in de eerste duizend rondes, 
+              dan zit het programma waarschijnlijk vast en komt niet tot een oplossing.
+              In dat geval is het beter opnieuw te starten.
+            </p>
+            <input id="generations" name="generations" type="number" min="100" max="20000" value="1000" />
+          </div>
+
+
+        </div>
+        
+				<h2><span class="number">2</span> Kopieren</h2>
+				<textarea name="inschrijvingen" id="inschrijvingen" placeholder="T20-0001    ENG11
+T20-0001    NED12
+copy/paste in dit formaat hier"></textarea>
+
+				<h2><span class="number">3</span> Start</h2>
+        <button type="button" id="run" name="run">ZOEKEN</button>
+      </form>
+      </section>
+
+      <section class="conflicts">
+        <h2>Conflicten</h2>
+        <div id="conflicts">
+          
+        </div>
+      </section>
+
+      <section class="solution">
+        <h2>Oplossing</h2>
+        <p>Ronde: <span id="generation">0</span></p>
+        <p>Dubbelen: <span id="numConflicts">0</span></p>
+        <div id="conflictsInSolution">          
+        </div>
+        <div id="solution">
+          
+        </div>
+        <div class="download hide">
+          <button type="button" id="downloadSolution">DOWNLOAD SOLUTION</button>
+          <button type="button" id="downloadStudentList">DOWNLOAD STUDENT LIST</button>          
+        </div>
+      </section>    
+
+      <section class="overview">
+        <h2>Rooster</h2>
+        <div id="studentSchedule">
+          
+        </div>
+        <div id="overview">
+          
+        </div>
+      </section>    
+
+      <footer>Created by Michiel van der Blonk - <a href="mailto:blonkm@gmail.com">blonkm@gmail.com</a> </footer>
+    </div>
+    
+
+
+    <script src="https://unpkg.com/@popperjs/core@2"></script>
+    <script src="https://unpkg.com/tippy.js@6"></script>
+    <link rel="stylesheet" href="https://unpkg.com/tippy.js@6/themes/light.css" />
+    <link rel="stylesheet" href="https://unpkg.com/tippy.js@6/animations/scale.css" />
+    <script>
+      tippy('.mutation .number', {
+        maxWidth:300, theme: 'light', animation: 'scale', inertia: true, content: $('.mutation .description').html()
+      });
+      tippy('.population .number', {
+        maxWidth:300, theme: 'light', animation: 'scale', inertia: true, content: $('.population .description').html()
+      });
+      tippy('.prepare .number', {
+        maxWidth:300, theme: 'light', animation: 'scale', inertia: true, content: $('.prepare .description').html()
+      });
+      tippy('.generations .number', {
+        maxWidth:300, theme: 'light', animation: 'scale', inertia: true, content: $('.generations .description').html()
+      });
+    </script>    
+  </body>
+</html>

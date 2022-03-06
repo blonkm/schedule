@@ -1,0 +1,6 @@
+This favicon was generated using the following font:
+
+- Font Title: Marko One
+- Font Author: Copyright (c) 2011, Cyreal (www.cyreal.org) with Reserved Font Name "Marko" and "Marko One".
+- Font Source: http://fonts.gstatic.com/s/markoone/v20/9Btq3DFG0cnVM5lw1haaKpUfrHPzUw.ttf
+- Font License: SIL Open Font License, 1.1 (http://scripts.sil.org/OFL))
