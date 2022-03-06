@@ -1,5 +1,5 @@
 # Schedule
-This program can schedule ststudeudent tests. 
+This program can schedule student tests. 
 The tests are input in the form
 "studentid[TAB]examid"
 
