@@ -75,7 +75,9 @@ class TableGenerator {
     return tables
   }
 
-  // obj is in form [{code1, code2}, {code1, code2}, ...]
+  // obj is in form [Concflict, Conflict, ...]
+  // a conflict is {exam1, exam2}
+  // an exam is {code, slot, size}
   // converts all conflicts to an HTML table
   conflictsToTable(obj) {
     const tdSep = '</td><td>'
@@ -90,10 +92,10 @@ class TableGenerator {
   
     let conflict = ''
     obj.forEach(function (item) {
-      if (item.code1 === undefined || item.code2 === undefined)
+      if (item.exam1.code === undefined || item.exam2.code === undefined)
         console.log("no code for " + item)
       else
-        conflict = [item.code1, item.code2].join(tdSep)
+        conflict = [item.exam1.code, item.exam2.code].join(tdSep)
       rows += startRow + conflict + endRow
     });
     if (obj.length > 0)

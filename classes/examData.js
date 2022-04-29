@@ -84,6 +84,7 @@ class ExamData {
     // read lines into array of student,exam form
     let text = txtExams.trim()
     let rows = text.split("\n").filter(x => x.trim() != '')
+    rows = Array.from(new Set(rows))
     let studentExams = rows.map(x => x.split(separator).map(x => x.trim()))
     studentExams.sort((a, b) => a[0] < b[0] ? -1 : 1)    
     
