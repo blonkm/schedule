@@ -118,7 +118,7 @@ class ExamData {
       if (this.examsByStudent[s.student.id])
         this.examsByStudent[s.student.id].push(s.exam)
       else
-        this.examsByStudent[s.student.id] = []
+        this.examsByStudent[s.student.id] = [s.exam]
     })
     return this
   }
