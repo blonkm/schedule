@@ -34,6 +34,8 @@ class Scheduler {
       this.studentSchedule.forEach(studentExam => {
         studentExam.exam.slot = result.find(e=>e.code==studentExam.exam.code).slot+1 //make it 1 based instead of 0 based
       })
+      let examsInConflicts = conflicts.flatMap(conflict => [conflict.exam1, conflict.exam2])
+      result.forEach(x=>examsInConflicts.some(ex=>ex.code == x.code)?x.inConflicts=true:'')
       let examsByCode = result.sort(compareByCode)
       let self = this
       $('#generation').html(Number(generation+1) + " of " + maxGenerations)

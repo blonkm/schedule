@@ -9,6 +9,7 @@ class TableGenerator {
   // generates the big table in the middle, with all exams alphabetically
   examsToTable(obj) {
     const tdSep = '</td><td>'
+    const tdSepConflict = '</td><td class="conflict">'
     const startRow = '<tr><td>'
     const endRow = '</td></tr>'
     const startTable = '<table class="exams">'
@@ -22,7 +23,8 @@ class TableGenerator {
     obj.forEach(function (item) {
       semester = item.code[item.code.length - 2]
       periode = item.code[item.code.length - 1]
-      exam = [item.code, item.size, item.slot, semester, periode].join(tdSep)
+      let sep = item.inConflicts?tdSepConflict:tdSep;
+      exam = [item.code, item.size, item.slot, semester, periode].join(sep)
       rows += startRow + exam + endRow
     });
     table = startTable + tHeader + rows + endTable
@@ -35,6 +37,7 @@ class TableGenerator {
   // converts one slot to an HTML table
   #slotToTable(obj) {
     const tdSep = '</td><td>'
+    const tdSepConflict = '</td><td class="conflict">'
     const startRow = '<tr><td>'
     const endRow = '</td></tr>'
     const startTable = '<table class="exams">'
@@ -46,7 +49,9 @@ class TableGenerator {
     let exam = ''
   
     obj.forEach(function (item) {
-      exam = [item.code, item.size].join(tdSep)
+      let sep = item.inConflicts?tdSepConflict:tdSep;
+      exam = [item.code, item.size].join(sep)
+          
       rows += startRow + exam + endRow
     });
     table = startTable + tHeader + rows + endTable

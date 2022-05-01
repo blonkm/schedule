@@ -12,7 +12,7 @@ $(function () {
     , "size": 20
     , "crossover": 0.1
     , "mutation": 0.5
-    , "skip": 100
+    , "skip": 10
     , "webWorkers": true
   };
 

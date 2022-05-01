@@ -76,6 +76,12 @@ button.active {
 td {
   border:1px solid #9cf;
 }
+
+td.conflict {
+  background-color: maroon;
+  color: white;
+}
+
 table{
   border-collapse: collapse;
 }
