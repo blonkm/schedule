@@ -31,12 +31,16 @@ class Scheduler {
     }
 
     if (!Scheduler.DONE) {
+      const getUniqueListBy = (arr, key) => [...new Map(arr.map(item => [item[key], item])).values()]
+
       this.studentSchedule.forEach(studentExam => {
         studentExam.exam.slot = result.find(e=>e.code==studentExam.exam.code).slot+1 //make it 1 based instead of 0 based
       })
       let examsInConflicts = conflicts.flatMap(conflict => [conflict.exam1, conflict.exam2])
-      result.forEach(x=>examsInConflicts.some(ex=>ex.code == x.code)?x.inConflicts=true:'')
+      examsInConflicts = getUniqueListBy(examsInConflicts, 'code').sort(compareByCode)
+      result.forEach(x=>examsInConflicts.some(ex=>ex.code == x.code)?x.inConflicts=true:'')      
       let examsByCode = result.sort(compareByCode)
+      
       let self = this
       $('#generation').html(Number(generation+1) + " of " + maxGenerations)
       $('#solution').html(self.tableGenerator.examsToTable(examsByCode))
